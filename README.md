@@ -84,6 +84,19 @@ For Android, you can build and run the app using Capacitor:
 
 
      npx cap open android
+Home Page Screenshoot
+<img width="426" alt="image" src="https://github.com/user-attachments/assets/17ea1d45-dfa1-4a8b-9f7b-117f5d851a77" />
+Search Suggestion Screenshoot
+<img width="426" alt="image" src="https://github.com/user-attachments/assets/d7c8b5b9-0857-4212-9642-530b17ee04ab" />
+Search Result Screenshoot
+<img width="426" alt="image" src="https://github.com/user-attachments/assets/a351c3b1-2381-4a35-b1a3-8fdc8dd763c4" />
+Search Vision Result Screenshoot :
+<img width="426" alt="image" src="https://github.com/user-attachments/assets/35a5991c-b5f4-4776-ac3a-92f94951c8dc" />
 
-<img width="559" alt="image" src="https://github.com/user-attachments/assets/17ea1d45-dfa1-4a8b-9f7b-117f5d851a77" />
+DEMO WEB APP LINK:
+
+      https://visual-product-finder.vercel.app/
+
+
+
 
