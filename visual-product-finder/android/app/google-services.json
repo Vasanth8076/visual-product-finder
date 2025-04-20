@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "989855014616",
+    "project_id": "visual-product-finder",
+    "storage_bucket": "visual-product-finder.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989855014616:android:6e75eaa2bc23c996f5c1ad",
+        "android_client_info": {
+          "package_name": "com.visualproductfinder.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "989855014616-bne0lt9d5otr0tvqshq43f4132k72g71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC55DqU2Oq0prLAEAaOahPBs59cBDMJdwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "989855014616-bne0lt9d5otr0tvqshq43f4132k72g71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
