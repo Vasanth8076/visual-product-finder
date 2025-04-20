@@ -100,9 +100,10 @@ Search Vision Result Screenshoot :
 
 <img width="426" alt="image" src="https://github.com/user-attachments/assets/35a5991c-b5f4-4776-ac3a-92f94951c8dc" />
 
-DEMO WEB APP LINK:
+Visual Product Finder - Live Demo
 
-      https://visual-product-finder.vercel.app/
+https://visual-product-finder.vercel.app/
+
 
 
 
