@@ -85,3 +85,5 @@ For Android, you can build and run the app using Capacitor:
 
      npx cap open android
 
+<img width="559" alt="image" src="https://github.com/user-attachments/assets/17ea1d45-dfa1-4a8b-9f7b-117f5d851a77" />
+
