@@ -23,11 +23,14 @@ import {
   SuggestionItem,
 } from "./styles/searchBar.styles.ts";
 import Loader from "../loader/Loader.tsx";
+import { ImageCropper } from "../../../features/ImageCropper/ImageCropper.tsx";
 
 const SearchBar = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   
   const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
+const [showCropper, setShowCropper] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
@@ -138,6 +141,7 @@ const SearchBar = () => {
           const transcript = event.results[0][0].transcript;
           if (inputRef.current) {
             inputRef.current.value = transcript;
+            setQuery(transcript); 
             handleSearch(transcript);
           }
         }
@@ -152,42 +156,7 @@ const SearchBar = () => {
     }
   };
 
-  const handleLensClick = async () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
-    input.capture = "environment";
-
-    input.onchange = async (event: any) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        try {
-          setLoading(true);
-          const base64 = await toBase64(file);
-          const labels = await sendToVisionAPI(base64);
-          const topLabel = labels?.[0]?.description;
-
-          let products = [];
-          if (topLabel) {
-            products = await searchProductOnGoogle(topLabel);
-          }
-
-          navigate("/lens-results", {
-            state: {
-              visionLabels: labels,
-              products: products,
-            },
-          });
-        } catch (error) {
-          console.error("Vision or Search API failed:", error);
-        }finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    input.click();
-  };
+  
   const toBase64 = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -197,9 +166,59 @@ const SearchBar = () => {
       reader.onerror = reject;
     });
 
+
+    const handleLensClick = async () => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
+      input.capture = "environment";
+    
+      input.onchange = async (event: any) => {
+        const file = event.target.files?.[0];
+        if (file) {
+          const base64 = await toBase64(file);
+          setCropSrc(`data:image/jpeg;base64,${base64}`);
+          setShowCropper(true); // show the cropping modal
+        }
+      };
+    
+      input.click();
+    };
+    const handleCropComplete = async (croppedBase64: string) => {
+      setShowCropper(false);
+      setCropSrc(null);
+    
+      try {
+        setLoading(true);
+        const labels = await sendToVisionAPI(croppedBase64);
+        const topLabel = labels?.[0]?.description;
+    
+        let products = [];
+        if (topLabel) {
+          products = await searchProductOnGoogle(topLabel);
+        }
+    
+        navigate("/lens-results", {
+          state: {
+            visionLabels: labels,
+            products: products,
+          },
+        });
+      } catch (error) {
+        console.error("Vision or Search API failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    const handleCropCancel = () => {
+      setCropSrc(null);
+      setShowCropper(false);
+    };
+        
     
   return (
-    <SearchWrapper>
+    <><SearchWrapper>
       <SearchBarContainer>
         <Icon src={SearchSvg} alt="Search" height="10" />
         <Input
@@ -209,8 +228,7 @@ const SearchBar = () => {
           onChange={handleInputChange}
           value={query}
           onFocus={() => query && setShowSuggestions(true)}
-          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-        />
+          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} />
         <IconGroup>
           <Icon src={MicIcon} alt="Mic" onClick={handleMicClick} />
           <Icon src={LensIcon} alt="Lens" onClick={handleLensClick} />
@@ -218,20 +236,28 @@ const SearchBar = () => {
       </SearchBarContainer>
 
       {suggestions.length > 0 && (
-    <SuggestionsDropdown>
-      {suggestions.map((s, i) => (
-        <SuggestionItem key={i} onClick={() => handleSuggestionClick(s)} >
-          <LeftIcon /> 
-          <TextGroup >
-            <Title>{s.title}</Title>
-            {s.subtitle && <Subtitle>{s.subtitle}</Subtitle>}
-          </TextGroup>
-        </SuggestionItem>
-      ))}
-    </SuggestionsDropdown>
-  )}
-   <Loader show={loading} />
-    </SearchWrapper>
+        <SuggestionsDropdown>
+          {suggestions.map((s, i) => (
+            <SuggestionItem key={i} onClick={() => handleSuggestionClick(s)}>
+              <LeftIcon />
+              <TextGroup>
+                <Title>{s.title}</Title>
+                {s.subtitle && <Subtitle>{s.subtitle}</Subtitle>}
+              </TextGroup>
+            </SuggestionItem>
+          ))}
+        </SuggestionsDropdown>
+      )}
+      {showCropper && cropSrc && (
+  <ImageCropper
+    src={cropSrc}
+    onComplete={handleCropComplete}
+    onCancel={handleCropCancel}
+  />
+)}
+
+
+    </SearchWrapper><Loader show={loading} /></>
   );
 };
 

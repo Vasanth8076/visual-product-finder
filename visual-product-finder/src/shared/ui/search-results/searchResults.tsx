@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import SearchBar from "../search-bar/SearchBar.tsx";
+import Loader from "../loader/Loader.tsx";
 
 
 const API_KEY = import.meta.env.VITE_GOOGLE_SEARCH_API_KEY; 
@@ -17,6 +18,12 @@ const SearchResults = () => {
 
   useEffect(() => {
     const fetchResults = async () => {
+      if (!query) {
+        setLoading(false);
+        return;
+      }
+      setLoading(true);
+      setResults([]);
       try {
         const res = await fetch(
           `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CX_ID}&q=${encodeURIComponent(query)}`
@@ -84,6 +91,7 @@ const SearchResults = () => {
         </div>
       )}
     </div>
+    <Loader show={loading} />
     </>
   );
 };
